@@ -94,9 +94,9 @@ async function run() {
                     },
                 }
             );
-            const executePaymentResult = await executePaymentResponse.json();
+            // const executePaymentResult = await executePaymentResponse.json();
 
-            res.send(executePaymentResult);
+            // res.send(executePaymentResult);
         });
     }
     finally {
