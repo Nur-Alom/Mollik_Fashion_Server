@@ -58,22 +58,23 @@ async function run() {
             const id_token = JSON.parse(query);
             // console.log('Grand Token from fontend', (id_token));
             sdk.auth(id_token);
-            sdk.createPaymentUsingPOST({
+            sdk.postTokenizedCheckoutCreate({
+                mode: 'tokenization mode',
+                payerReference: '1',
+                callbackURL: '/',
+                agreementID: 'test',
                 amount: '100',
-                currency: 'BDT',
-                intent: 'sale',
-                merchantInvoiceNumber: '2005',
-                merchantAssociationInfo: 'test'
+                currency: 'BDT'
             }, {
                 'x-app-key': APP_KEY
             })
                 .then(data => {
-                    console.log(data)
-                    res.json(data)
+                    console.log(data);
+                    res.json(data);
                 })
                 .catch(err => {
-                    console.log(err)
-                    res.json(err)
+                    console.error(err);
+                    res.json(err);
                 });
         });
 
