@@ -54,9 +54,10 @@ async function run() {
 
         // Create Bkash Payment.
         app.get("/cart/checkout/payment/createBkashPayment", async (req, res) => {
-            const token = req.headers.grandtoken;
-            // console.log('Grand Token from fontend', (token));
-            sdk.auth(token);
+            const query = req.query.Id_Token;
+            const id_token = JSON.parse(query);
+            // console.log('Grand Token from fontend', (id_token));
+            sdk.auth(id_token);
             sdk.createPaymentUsingPOST({
                 amount: '100',
                 currency: 'BDT',
