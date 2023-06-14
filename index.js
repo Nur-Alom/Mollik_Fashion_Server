@@ -57,14 +57,21 @@ async function run() {
             const query = req.query.Id_Token;
             const id_token = JSON.parse(query);
             // console.log('Grand Token from fontend', (id_token));
-            sdk.auth(id_token);
+            sdk.auth({
+                'Content-Type': "application/json",
+                'Accept': "application/json",
+                'Authorization': id_token,
+                'X-App-Key': APP_KEY
+            });
             sdk.postTokenizedCheckoutCreate({
-                mode: 'tokenization mode',
+                mode: '0011',
                 payerReference: '1',
                 callbackURL: '/',
                 agreementID: 'test',
                 amount: '100',
-                currency: 'BDT'
+                currency: 'BDT',
+                intent: 'sale',
+                merchantInvoiceNumber: '2005'
             }, {
                 'x-app-key': APP_KEY
             })
