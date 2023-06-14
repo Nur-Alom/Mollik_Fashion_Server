@@ -53,20 +53,15 @@ async function run() {
 
 
         // Create Bkash Payment.
-        app.get("/cart/checkout/payment/createBkashPayment", async (req, res) => {
-            const query = req.query.Id_Token;
+        app.post("/cart/checkout/payment/createBkashPayment", async (req, res) => {
+            const query = req.headers.authorization;
             const id_token = JSON.parse(query);
             // console.log('Grand Token from fontend', (id_token));
-            sdk.auth({
-                'Content-Type': "application/json",
-                'Accept': "application/json",
-                'Authorization': id_token,
-                'X-App-Key': APP_KEY
-            });
+            sdk.auth(`Bearer ${id_token?.data?.id_token}`);
             sdk.postTokenizedCheckoutCreate({
                 mode: '0011',
                 payerReference: '1',
-                callbackURL: '/',
+                callbackURL: 'http://localhost:3000',
                 agreementID: 'test',
                 amount: '100',
                 currency: 'BDT',
@@ -76,11 +71,11 @@ async function run() {
                 'x-app-key': APP_KEY
             })
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     res.json(data);
                 })
                 .catch(err => {
-                    console.error(err);
+                    // console.error(err);
                     res.json(err);
                 });
         });
