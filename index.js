@@ -58,50 +58,47 @@ async function run() {
             const id_token = JSON.parse(query);
             // console.log('Grand Token from fontend', (id_token));
             sdk.auth(`Bearer ${id_token?.data?.id_token}`);
-            sdk.postTokenizedCheckoutCreate({
-                mode: '0011',
-                payerReference: '1',
-                callbackURL: 'http://localhost:3000',
-                agreementID: 'test',
+            sdk.createPaymentUsingPOST({
                 amount: '100',
                 currency: 'BDT',
                 intent: 'sale',
-                merchantInvoiceNumber: '2005'
+                merchantInvoiceNumber: '2005',
+                merchantAssociationInfo: '1'
             }, {
                 'x-app-key': APP_KEY
             })
                 .then(data => {
-                    // console.log(data);
-                    res.json(data);
+                    console.log(data)
+                    res.send(data)
                 })
                 .catch(err => {
-                    // console.error(err);
-                    res.json(err);
-                });
+                    console.error(err)
+                    res.send(err)
+                })
         });
 
 
         // Execute Bkash Payment.
-        app.get("/executeBkashPayment", async (req, res) => {
-            const token = req.cookies.token;
-            const payment = req.cookies.payment;
+        // app.get("/executeBkashPayment", async (req, res) => {
+        //     const token = req.cookies.token;
+        //     const payment = req.cookies.payment;
 
-            const executePaymentResponse = await fetch(
-                `https://checkout.sandbox.bka.sh/v1.2.0-beta/checkout/payment/execute/${payment.paymentID}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                        authorization: token.id_token,
-                        "x-app-key": process.env.KEY,
-                    },
-                }
-            );
-            // const executePaymentResult = await executePaymentResponse.json();
+        //     const executePaymentResponse = await fetch(
+        //         `https://checkout.sandbox.bka.sh/v1.2.0-beta/checkout/payment/execute/${payment.paymentID}`,
+        //         {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //                 Accept: "application/json",
+        //                 authorization: token.id_token,
+        //                 "x-app-key": process.env.KEY,
+        //             },
+        //         }
+        //     );
+        // const executePaymentResult = await executePaymentResponse.json();
 
-            // res.send(executePaymentResult);
-        });
+        // res.send(executePaymentResult);
+        // });
     }
     finally {
         // await client.close();
